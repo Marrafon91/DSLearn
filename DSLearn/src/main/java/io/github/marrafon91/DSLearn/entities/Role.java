@@ -16,7 +16,7 @@ public class Role {
     private String authority;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> roles = new HashSet<>();
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
@@ -42,8 +42,8 @@ public class Role {
         this.authority = authority;
     }
 
-    public Set<User> getRoles() {
-        return roles;
+    public Set<User> getUsers() {
+        return users;
     }
 
     @Override
