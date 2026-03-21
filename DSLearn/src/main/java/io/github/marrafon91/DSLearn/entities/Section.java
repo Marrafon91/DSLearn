@@ -1,15 +1,12 @@
 package io.github.marrafon91.DSLearn.entities;
 
-import io.github.marrafon91.DSLearn.enums.ResourceType;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_resource")
-public class Resource {
+@Table(name = "tb_section")
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,32 +15,29 @@ public class Resource {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
     private Integer position;
     private String imgUri;
 
-    @Enumerated(EnumType.ORDINAL)
-    private ResourceType resourceType;
+    @ManyToOne
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
 
     @ManyToOne
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
+    @JoinColumn(name = "prerequisite_id")
+    private Section prerequisite;
 
-    @OneToMany(mappedBy = "resource")
-    private List<Section> sections =  new ArrayList<>();
-
-
-
-    public Resource() {
+    public Section() {
     }
 
-    public Resource(Long id, String title, String description, Integer position, String imgUri, ResourceType resourceType, Offer offer) {
+    public Section(Long id, String title, String description, Integer position, String imgUri, Resource resource, Section prerequisite) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.position = position;
         this.imgUri = imgUri;
-        this.resourceType = resourceType;
-        this.offer = offer;
+        this.resource = resource;
+        this.prerequisite = prerequisite;
     }
 
     public Long getId() {
@@ -86,28 +80,28 @@ public class Resource {
         this.imgUri = imgUri;
     }
 
-    public ResourceType getResourceType() {
-        return resourceType;
+    public Resource getResource() {
+        return resource;
     }
 
-    public void setResourceType(ResourceType resourceType) {
-        this.resourceType = resourceType;
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
-    public Offer getOffer() {
-        return offer;
+    public Section getPrerequisite() {
+        return prerequisite;
     }
 
-    public void setOffer(Offer offer) {
-        this.offer = offer;
+    public void setPrerequisite(Section prerequisite) {
+        this.prerequisite = prerequisite;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Resource resource = (Resource) o;
-        return Objects.equals(id, resource.id);
+        Section section = (Section) o;
+        return Objects.equals(id, section.id);
     }
 
     @Override
