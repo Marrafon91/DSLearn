@@ -4,13 +4,15 @@ import io.github.marrafon91.DSLearn.entities.pk.EnrollmentPK;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_enrollment")
 public class Enrollment {
 
     @EmbeddedId
-    private EnrollmentPK id = new EnrollmentPK();
+    private final EnrollmentPK id = new EnrollmentPK();
 
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private Instant enrollMoment;
@@ -20,6 +22,9 @@ public class Enrollment {
 
     private boolean available;
     private boolean onlyUpdate;
+
+    @ManyToMany(mappedBy = "enrollmentsDone")
+    private final Set<Lesson> lessonsDone = new HashSet<>();
 
     public Enrollment() {
     }
@@ -49,11 +54,11 @@ public class Enrollment {
         id.setOffer(offer);
     }
 
-    public Instant getEnrollmentMoment() {
+    public Instant getEnrollMoment() {
         return enrollMoment;
     }
 
-    public void setEnrollmentMoment(Instant enrollmentMoment) {
+    public void setEnrollMoment(Instant enrollMoment) {
         this.enrollMoment = enrollMoment;
     }
 
@@ -81,4 +86,20 @@ public class Enrollment {
         this.onlyUpdate = onlyUpdate;
     }
 
+    public Set<Lesson> getLessonsDone() {
+        return lessonsDone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Enrollment that = (Enrollment) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
