@@ -2,9 +2,7 @@ package io.github.marrafon91.DSLearn.entities;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_lesson")
@@ -20,6 +18,9 @@ public abstract class Lesson {
     @ManyToOne
     @JoinColumn(name = "section_id")
     private Section section;
+
+    @OneToMany(mappedBy = "lesson")
+    private final List<Deliver> delivers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "tb_lessons_done",
@@ -74,6 +75,10 @@ public abstract class Lesson {
 
     public Set<Enrollment> getEnrollmentsDone() {
         return enrollmentsDone;
+    }
+
+    public List<Deliver> getDelivers() {
+        return delivers;
     }
 
     @Override
