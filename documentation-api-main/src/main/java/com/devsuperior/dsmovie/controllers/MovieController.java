@@ -2,6 +2,9 @@ package com.devsuperior.dsmovie.controllers;
 
 import java.net.URI;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,40 +27,49 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/movies")
+@Tag(name = "Movies", description = "Controller for Movie")
 public class MovieController {
 
-	@Autowired
-	private MovieService service;
+    @Autowired
+    private MovieService service;
 
-	@GetMapping(produces = "application/json")
-	public Page<MovieDTO> findAll(Pageable pageable) {
-		return service.findAll(pageable);
-	}
+    @GetMapping(produces = "application/json")
+    public Page<MovieDTO> findAll(Pageable pageable) {
+        return service.findAll(pageable);
+    }
 
-	@GetMapping(value = "/{id}", produces = "application/json")
-	public MovieDTO findById(@PathVariable Long id) {
-		return service.findById(id);
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(produces = "application/json")
-	public ResponseEntity<MovieDTO> insert(@Valid @RequestBody MovieDTO dto) {
-		dto = service.insert(dto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
-		return ResponseEntity.created(uri).body(dto);
-	}
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public MovieDTO findById(@PathVariable Long id) {
+        return service.findById(id);
+    }
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PutMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<MovieDTO> update(@PathVariable Long id, @Valid @RequestBody MovieDTO dto) {
-		dto = service.update(id, dto);
-		return ResponseEntity.ok().body(dto);
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<MovieDTO> delete(@PathVariable Long id) {
-		service.delete(id);
-		return ResponseEntity.noContent().build();
-	}
+    @Operation(description = "Create a new movie", summary = "Create a new Movie",
+            responses = {
+                    @ApiResponse(description = "Created", responseCode = "201"),
+                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403"),
+                    @ApiResponse(description = "Unprocessable Entity", responseCode = "422")
+            })
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<MovieDTO> insert(@Valid @RequestBody MovieDTO dto) {
+        dto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<MovieDTO> update(@PathVariable Long id, @Valid @RequestBody MovieDTO dto) {
+        dto = service.update(id, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<MovieDTO> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
