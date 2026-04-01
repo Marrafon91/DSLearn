@@ -24,8 +24,18 @@ public class MovieController {
 		return service.findAll(pageable);
 	}
 
+	@GetMapping(produces = "application/vdn.devsuperior.dsmovie-v1+json")
+	public Page<MovieGenreDTO> findAllV1(Pageable pageable) {
+		return service.findAllWithGenre(pageable);
+	}
+
 	@GetMapping(value = "/{id}")
 	public MovieDTO findById(@PathVariable Long id) {
 		return service.findById(id);
+	}
+
+	@GetMapping(value = "/{id}", produces = "application/vdn.devsuperior.dsmovie-v1+json")
+	public MovieGenreDTO findByIdV1(@PathVariable Long id) {
+		return service.findByIdMovieGenre(id);
 	}
 }
