@@ -1,41 +1,40 @@
 package io.github.marrafon91.mongoDB.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.Objects;
-import java.util.UUID;
 
 @Document(collection = "posts")
 public class Post {
-
     @Id
-    private UUID id;
-
+    private String id;
     private Instant date;
-
+    
     @Indexed(unique = true)
     private String title;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     public Post() {
     }
 
-    public Post(UUID id, Instant date, String title, String content) {
+    public Post(String id, Instant date, String title, String content) {
         this.id = id;
         this.date = date;
         this.title = title;
         this.content = content;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

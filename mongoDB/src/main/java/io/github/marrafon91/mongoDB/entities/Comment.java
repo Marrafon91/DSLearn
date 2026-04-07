@@ -1,32 +1,31 @@
 package io.github.marrafon91.mongoDB.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.Objects;
-import java.util.UUID;
 
 @Document(collection = "comments")
 public class Comment {
 
     @Id
-    private UUID id;
+    private String id;
     private Instant date;
 
     public Comment() {
     }
 
-    public Comment(UUID id, Instant date) {
+    public Comment(String id, Instant date) {
         this.id = id;
         this.date = date;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
