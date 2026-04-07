@@ -1,33 +1,39 @@
 package io.github.marrafon91.mongoDB.entities;
 
-import jakarta.persistence.Column;
+import io.github.marrafon91.mongoDB.entities.embedded.Author;
+import io.github.marrafon91.mongoDB.entities.embedded.Comment;
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "posts")
 public class Post {
     @Id
     private String id;
-    private Instant date;
+    private Instant moment;
     
     @Indexed(unique = true)
     private String title;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    private Author author;
+
+    private List<Comment> comments = new ArrayList<>();
 
     public Post() {
     }
 
-    public Post(String id, Instant date, String title, String content) {
+    public Post(String id, Instant moment, String title, String content, Author author) {
         this.id = id;
-        this.date = date;
+        this.moment = moment;
         this.title = title;
         this.content = content;
+        this.author = author;
     }
 
     public String getId() {
@@ -38,12 +44,12 @@ public class Post {
         this.id = id;
     }
 
-    public Instant getDate() {
-        return date;
+    public Instant getMoment() {
+        return moment;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public String getTitle() {
@@ -60,6 +66,18 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 
     @Override

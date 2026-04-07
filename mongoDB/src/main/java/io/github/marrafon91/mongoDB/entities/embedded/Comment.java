@@ -1,4 +1,4 @@
-package io.github.marrafon91.mongoDB.entities;
+package io.github.marrafon91.mongoDB.entities.embedded;
 
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,14 +11,18 @@ public class Comment {
 
     @Id
     private String id;
-    private Instant date;
+    private String content;
+    private Instant moment;
+
+    private Author author;
 
     public Comment() {
     }
 
-    public Comment(String id, Instant date) {
+    public Comment(String id,String content, Instant moment) {
         this.id = id;
-        this.date = date;
+        this.content = content;
+        this.moment = moment;
     }
 
     public String getId() {
@@ -29,12 +33,28 @@ public class Comment {
         this.id = id;
     }
 
-    public Instant getDate() {
-        return date;
+    public String getContent() {
+        return content;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Instant getMoment() {
+        return moment;
+    }
+
+    public void setMoment(Instant moment) {
+        this.moment = moment;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override

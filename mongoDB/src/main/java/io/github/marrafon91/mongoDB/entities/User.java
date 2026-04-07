@@ -2,8 +2,11 @@ package io.github.marrafon91.mongoDB.entities;
 
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "users")
@@ -16,6 +19,9 @@ public class User {
 
     @Indexed(unique = true)
     private String email;
+
+    @DBRef(lazy = true)
+    public List<Post> posts = new ArrayList<>();
 
     public User() {
     }
@@ -48,6 +54,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     @Override
