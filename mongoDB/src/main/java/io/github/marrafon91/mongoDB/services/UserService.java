@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,5 +23,11 @@ public class UserService {
             throw new ResourceNotFoundException("Usúario não encontrado! ");
         }
         return result.stream().map(UserDTO::new).toList();
+    }
+
+    public UserDTO findById(String id) {
+        Optional<User> result = userRepository.findById(id);
+        return result.map(UserDTO::new)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado. ID: " + id));
     }
 }
