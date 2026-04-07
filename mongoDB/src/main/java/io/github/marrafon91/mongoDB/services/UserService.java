@@ -4,6 +4,7 @@ import io.github.marrafon91.mongoDB.dtos.UserDTO;
 import io.github.marrafon91.mongoDB.entities.User;
 import io.github.marrafon91.mongoDB.exceptions.ResourceNotFoundException;
 import io.github.marrafon91.mongoDB.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,19 @@ public class UserService {
         Optional<User> result = userRepository.findById(id);
         return result.map(UserDTO::new)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado. ID: " + id));
+    }
+
+    public UserDTO insert(UserDTO dto) {
+        User entity = new User();
+        copyDtoToEntity(dto, entity);
+
+        entity = userRepository.insert(entity);
+
+        return new UserDTO(entity);
+    }
+
+    private void copyDtoToEntity(UserDTO dto, User entity) {
+        entity.setName(dto.name());
+        entity.setEmail(dto.email());
     }
 }
