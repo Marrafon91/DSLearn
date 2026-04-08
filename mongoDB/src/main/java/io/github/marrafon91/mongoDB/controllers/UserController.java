@@ -1,5 +1,6 @@
 package io.github.marrafon91.mongoDB.controllers;
 
+import io.github.marrafon91.mongoDB.dtos.PostDTO;
 import io.github.marrafon91.mongoDB.dtos.UserDTO;
 import io.github.marrafon91.mongoDB.services.UserService;
 import jakarta.validation.Valid;
@@ -54,5 +55,11 @@ public class UserController {
     public ResponseEntity<UserDTO> delete(@PathVariable String id) {
          service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<PostDTO>> findByPosts(@PathVariable String id) {
+        List<PostDTO> result = service.getUserPosts(id);
+        return ResponseEntity.ok().body(result);
     }
 }

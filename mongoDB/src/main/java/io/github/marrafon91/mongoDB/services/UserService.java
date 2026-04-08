@@ -1,6 +1,8 @@
 package io.github.marrafon91.mongoDB.services;
 
+import io.github.marrafon91.mongoDB.dtos.PostDTO;
 import io.github.marrafon91.mongoDB.dtos.UserDTO;
+import io.github.marrafon91.mongoDB.entities.Post;
 import io.github.marrafon91.mongoDB.entities.User;
 import io.github.marrafon91.mongoDB.exceptions.ResourceNotFoundException;
 import io.github.marrafon91.mongoDB.repositories.UserRepository;
@@ -56,6 +58,12 @@ public class UserService {
             throw new ResourceNotFoundException("Usuário não encontrado. ID: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    public List<PostDTO> getUserPosts(String id) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado. ID: " + id));
+        return entity.getPosts().stream().map(PostDTO::new).toList();
     }
 
     private void copyDtoToEntity(UserDTO dto, User entity) {
