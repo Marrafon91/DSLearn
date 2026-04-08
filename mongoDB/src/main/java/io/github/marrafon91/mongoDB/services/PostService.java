@@ -7,6 +7,7 @@ import io.github.marrafon91.mongoDB.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,5 +25,10 @@ public class PostService {
     public Post getUserPosts(String id) {
        Optional<Post>  result = postRepository.findById(id);
         return result.orElseThrow(() -> new ResourceNotFoundException("Post não encontrado. ID: " + id));
+    }
+
+    public List<PostDTO> findByTitle(String text) {
+        List<Post> result = postRepository.findByTitleContainingIgnoreCase(text);
+        return result.stream().map(PostDTO::new).toList();
     }
 }
