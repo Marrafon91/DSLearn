@@ -12,28 +12,37 @@ import reactor.core.publisher.Mono;
 @Service
 public class UserService {
 
-	@Autowired
-	private UserRepository repository;
+    @Autowired
+    private UserRepository repository;
 
 
-	public Flux<UserDTO> findAll() {
-		return repository.findAll().map(UserDTO::new);
-	}
+    public Flux<UserDTO> findAll() {
+        return repository.findAll().map(UserDTO::new);
+    }
 
-	public Mono<UserDTO> findById(String id) {
-		return repository.findById(id).map(UserDTO::new)
-				.switchIfEmpty(Mono.error(new ResourceNotFoundException("User not found!")));
-	}
+    public Mono<UserDTO> findById(String id) {
+        return repository.findById(id).map(UserDTO::new)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("User not found!")));
+    }
 
-	public Mono<UserDTO> insert(UserDTO dto) {
-		User entity = new User();
-		copyDtoToEntity(dto, entity);
+    public Mono<UserDTO> insert(UserDTO dto) {
+        User entity = new User();
+        copyDtoToEntity(dto, entity);
         return repository.save(entity).map(UserDTO::new);
-	}
+    }
 
-	private void copyDtoToEntity(UserDTO dto, User entity) {
-		entity.setName(dto.getName());
-		entity.setEmail(dto.getEmail());
-	}
+    public Mono<UserDTO> update(String id, UserDTO dto) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("User not found!")))
+                .flatMap(existingUser -> {
+                    copyDtoToEntity(dto, existingUser);
+                    return repository.save(existingUser).map(UserDTO::new);
+                });
+    }
+
+    private void copyDtoToEntity(UserDTO dto, User entity) {
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+    }
 
 }
