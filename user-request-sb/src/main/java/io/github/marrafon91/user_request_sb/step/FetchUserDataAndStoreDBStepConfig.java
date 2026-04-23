@@ -29,6 +29,7 @@ public class FetchUserDataAndStoreDBStepConfig {
         return new StepBuilder("fetchUserDataAndStoreDBStep", jobRepository)
                 .<UserDTO, UserDTO>chunk(chunkSize, transactionManager)
                 .reader(fetchUserDataReader)
+                .writer(insertUserDataDBWriter)
                 .build();
     }
 }
