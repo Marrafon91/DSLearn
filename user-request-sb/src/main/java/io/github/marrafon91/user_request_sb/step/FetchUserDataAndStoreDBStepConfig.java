@@ -1,4 +1,4 @@
-package step;
+package io.github.marrafon91.user_request_sb.step;
 
 import io.github.marrafon91.user_request_sb.dto.UserDTO;
 import org.springframework.batch.core.Step;

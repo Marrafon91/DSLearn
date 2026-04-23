@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -22,9 +23,20 @@ public class FetchUserDataReaderConfig implements ItemReader<UserDTO> {
 
     private int page = 0;
 
+    private List<UserDTO> users = new ArrayList<>();
+    private int userIndex = 0;
+
     @Override
     public UserDTO read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        return null;
+        UserDTO user;
+        if (userIndex < users.size()) {
+            user = users.get(userIndex);
+        } else {
+            user = null;
+        }
+
+        userIndex++;
+        return user;
     }
 
     private List<UserDTO> fetchUserDataFromAPI() throws Exception {
@@ -34,8 +46,8 @@ public class FetchUserDataReaderConfig implements ItemReader<UserDTO> {
         ResponseEntity<ResponseUser> response = restTemplate.exchange(String.format(uri, getPage()),
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<ResponseUser>() {
-        });
-//        assert response.getBody() != null;
+                });
+        assert response.getBody() != null;
         List<UserDTO> result = response.getBody().getContent();
         return result;
 
