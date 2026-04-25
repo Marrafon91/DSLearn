@@ -27,7 +27,7 @@ CREATE TABLE tb_user_book_loan
 );
 
 INSERT INTO tb_user(id, name, email)
-VALUES (1, 'Guilherme', 'guilherme.marrafon1@gmail.com.com');
+VALUES (1, 'Guilherme', 'guilherme.marrafon1@gmail.com');
 INSERT INTO tb_user(id, name, email)
 VALUES (2, 'João', 'joao@gmail.com');
 INSERT INTO tb_user(id, name, email)
