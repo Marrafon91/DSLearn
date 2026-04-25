@@ -35,9 +35,9 @@ public class FetchUserDataAndStoreDBStepConfig {
                 .<UserDTO, User>chunk(chunkSize, transactionManager)
                 .reader(fetchUserDataReader)
                 .processor(selectFiledsUserDataProcessor)
-                .faultTolerant()
-                .skip(Exception.class)
-                .skipLimit(100)
+//                .faultTolerant()// muitas consulta com SKIP LIMIT = 100;
+//                .skip(Exception.class)
+//                .skipLimit(100)
                 .writer(insertUserDataDBWriter)
                 .build();
     }
