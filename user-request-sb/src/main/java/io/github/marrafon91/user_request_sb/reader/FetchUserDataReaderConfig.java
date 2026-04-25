@@ -87,7 +87,7 @@ public class FetchUserDataReaderConfig implements ItemReader<UserDTO> {
 
     @AfterChunk
     public void afterChunk(ChunkContext context) throws Exception {
-        logger.info("[READER STEP] Finished processing chunk. Incrementing page and resetting user index...");
+        logger.info("[READER STEP] Finished reading chunk. Total users read: {}", users.size());
         incrementPage();
         userIndex = 0;
         users = new ArrayList<>();
