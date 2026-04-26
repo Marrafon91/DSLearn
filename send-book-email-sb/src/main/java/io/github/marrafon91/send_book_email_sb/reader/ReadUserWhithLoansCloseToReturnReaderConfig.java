@@ -1,13 +1,18 @@
 package io.github.marrafon91.send_book_email_sb.reader;
 
+import io.github.marrafon91.send_book_email_sb.domain.Book;
+import io.github.marrafon91.send_book_email_sb.domain.User;
 import io.github.marrafon91.send_book_email_sb.domain.UserBookLoan;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Configuration
 public class ReadUserWhithLoansCloseToReturnReaderConfig {
@@ -36,5 +41,24 @@ public class ReadUserWhithLoansCloseToReturnReaderConfig {
                         """.formatted(numDastoNotifyReturn))
                 .rowMapper(rowMapper())
                 .build();
+    }
+
+    private RowMapper<UserBookLoan> rowMapper() {
+        return new RowMapper<UserBookLoan>() {
+
+            @Override
+            public UserBookLoan mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+                User user = new User(rs.getInt("user_id"), rs.getString("user_name"), rs.getString("user_email"));
+
+                Book book = new Book();
+                book.setId(rs.getInt("book_id"));
+                book.setName(rs.getString("book_name"));
+
+                UserBookLoan userBookLoan = new UserBookLoan(user, book, rs.getDate("loan_date"));
+
+                return userBookLoan;
+            }
+        };
     }
 }
