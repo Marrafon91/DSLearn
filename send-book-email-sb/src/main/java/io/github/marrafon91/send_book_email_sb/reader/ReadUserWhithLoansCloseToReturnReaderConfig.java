@@ -3,6 +3,7 @@ package io.github.marrafon91.send_book_email_sb.reader;
 import io.github.marrafon91.send_book_email_sb.domain.Book;
 import io.github.marrafon91.send_book_email_sb.domain.User;
 import io.github.marrafon91.send_book_email_sb.domain.UserBookLoan;
+import io.github.marrafon91.send_book_email_sb.util.GenerateBookReturnDate;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 @Configuration
 public class ReadUserWhithLoansCloseToReturnReaderConfig {
 
-    int numDastoNotifyReturn = 6;
+    int numDastoNotifyReturn = GenerateBookReturnDate.numDaysToReturnBook - 1;
 
     @Bean
     public ItemReader<UserBookLoan> readUserWhithLoansCloseToReturnReader(

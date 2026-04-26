@@ -24,7 +24,7 @@ public class SendEmailUserStepConfig {
     @Bean
     public Step sendEmailUserStep(ItemReader<UserBookLoan> readUserWhithLoansCloseToReturnReader,
                                   ItemProcessor<UserBookLoan, Mail> processLoanNotificationEmailProcessor,
-                                  ItemWriter<UserBookLoan> sendEmailRequestReturnWriter,
+                                  ItemWriter<Mail> sendEmailRequestReturnWriter,
                                   JobRepository jobRepository) {
 
         return new StepBuilder("sendEmailUserStep", jobRepository)
